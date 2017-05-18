@@ -1,5 +1,6 @@
 import React, {PureComponent, PropTypes} from 'react';
 import {EVENT_PROP_TYPE} from './constants';
+import moment from 'moment'
 
 import './TimeSlotEvent.css';
 
@@ -11,17 +12,23 @@ export default class TimeSlotEvent extends PureComponent {
 
     render() {
         let {
-            event: {title, color},
+            event: {title, color, start},
             onSelect,
         } = this.props;
 
-        // TODO: Need a way to determine that the event is in the past so that it
-        // can be displayed faded-out
+        let classNames = [
+            `time-slot-event`,
+            `time-slot-event--${color}`
+        ]
+
+        if (start < Date.now()) {
+            classNames.push(`time-slot-event--past`)
+        }
 
         return (
-            <button className={`time-slot-event time-slot-event--${color}`} onClick={onSelect}>
-                {title}
+            <button className={classNames.join(` `)} onClick={onSelect}>
+                {moment(start).format('L LT')}: {title}
             </button>
-        );
+        )
     }
 }

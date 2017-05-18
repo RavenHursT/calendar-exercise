@@ -39,3 +39,7 @@
     background-color: #009e60;
     border-color: #003800;
 }
+
+.time-slot-event--past {
+    opacity: .5;
+}

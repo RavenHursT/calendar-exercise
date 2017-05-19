@@ -1,0 +1,20 @@
+ul.view-toggle {
+    display: inline-block;
+    list-style: none;
+    margin: 0 0 1rem 0;
+}
+
+ul.view-toggle li {
+    float: left;
+    margin-right: .5rem;
+    padding: .5rem
+}
+
+ul.view-toggle li:hover {
+    cursor: pointer;
+}
+
+ul.view-toggle li.selected {
+    font-weight: 600;
+    background: lightgrey;
+}

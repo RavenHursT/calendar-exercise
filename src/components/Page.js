@@ -4,6 +4,8 @@ import EventDetailOverlay from './EventDetailOverlay';
 import {filterEventsByDay, getEventFromEvents, getDisplayDate} from '../utils';
 import DATA_SET from '../utils/data';
 import moment from 'moment'
+import {VIEWS} from '../utils/constants'
+import ViewToggle from './ViewToggle'
 
 import './Page.css';
 
@@ -33,9 +35,22 @@ export default class Page extends PureComponent {
         // The currently selected day represented by numerical timestamp
         day: Date.now(),
 
+        selectedView: VIEWS.DAY,
+
         // The currently selected event in the agenda
         // (mainly to trigger event detail overlay)
         selectedEventId: undefined
+    }
+
+    constructor(props) {
+        super(props)
+        this.bodyElem = document.getElementsByTagName(`BODY`)[0]
+    }
+
+    changeView (selectedView) {
+        this.setState({
+            selectedView
+        })
     }
 
     _handleSelectEvent(selectedEventId) {
@@ -67,12 +82,16 @@ export default class Page extends PureComponent {
         let eventDetailOverlay;
 
         if (selectedEvent) {
+            this.bodyElem.className = `no-scroll`
             eventDetailOverlay = (
                 <EventDetailOverlay
                     event={selectedEvent}
                     onClose={this._handleEventDetailOverlayClose.bind(this)}
                 />
             );
+        } else {
+            // TODO (mmarcus): Idealy this class would just be controlled via state
+            this.bodyElem.className = ``
         }
 
         return (
@@ -85,6 +104,7 @@ export default class Page extends PureComponent {
                     onPrev={this._handlePrev.bind(this)}
                     onNext={this._handleNext.bind(this)}
                 />
+                <ViewToggle {...this.state} changeView={this.changeView.bind(this)} />
                 <Calendar events={filteredEvents} onSelectEvent={this._handleSelectEvent.bind(this)} />
                 {eventDetailOverlay}
             </div>
